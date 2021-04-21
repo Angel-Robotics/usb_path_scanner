@@ -116,11 +116,13 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Divider(),
             IconButton(
                 icon: Icon(Icons.refresh),
                 onPressed: () {
                   refreshPath();
                 }),
+            Divider(),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: IconButton(
@@ -130,22 +132,34 @@ class _MyHomePageState extends State<MyHomePage> {
                       print(storageItems[0].path);
                       pathItems.add("----------------------");
                       pathItems.add("${storageItems[0]}");
-                      pathItems.add("${storageItems[0].path}");
-                      pathItems.add("${storageItems[0].absolute}");
-                      pathItems.add("${storageItems[0].uri}");
+                      pathItems.add("path: ${storageItems[0].path}");
+                      pathItems.add("absolute: ${storageItems[0].absolute}");
+                      pathItems.add("uri: ${storageItems[0].uri}");
+
+                      Directory topPath = Directory(join(storageItems[0].path, "/Angel Legs/Report"));
+                      print("topPath: ${topPath}");
+                      pathItems.add("----------------------");
+                      pathItems.add("${topPath.path}");
+                      setState(() {
+                      });
+
+                      if(!await topPath.exists()) await topPath.create();
+
                       Directory tempPath = Directory(join(storageItems[0].path, "/Angel Legs/Report/Hello_${DateTime.now()}.txt"));
-                      File f = File(tempPath.path);
-                      await f.writeAsString("Hello World");
+                      try{
+                        File f = File(tempPath.path);
+                        await f.writeAsString("Hello World");
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Done!")));
+                      }catch(e){
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
+                      }
+
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("발견된 외부 장치가 없습니다.")));
                     }
                   }),
             ),
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            Divider(),
             Expanded(
               child: ListView.builder(
                   itemCount: pathItems.length,
