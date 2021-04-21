@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,36 +14,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter External USB Path',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter External USB Path Scanner'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -50,13 +36,50 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  List<String> pathItems = [];
+  List<FileSystemEntity> storageItems = [];
+
+  Future refreshPath() async {
+    pathItems.clear();
+    storageItems.clear();
+    getExternalStorageDirectory().then((value) {
+      print(">>> 0  $value");
+      print(">>> 1 ${value.parent}");
+      print(">>> 2 ${value.parent.parent}");
+      print(">>> 3 ${value.parent.parent.parent}");
+      print(">>> 4 ${value.parent.parent.parent.parent.toString()}");
+      print(">>> 5 ${value.parent.parent.parent.parent.parent.toString()}");
+      print(">>> 6 ${value.parent.parent.parent.parent.parent.parent.toString()}");
+
+      List<FileSystemEntity> v = value.parent.parent.parent.parent.parent.parent.listSync();
+      storageItems.addAll(v);
+      print(v);
+
+      pathItems.add(value.toString());
+      pathItems.add(value.parent.toString());
+      pathItems.add(value.parent.parent.toString());
+      pathItems.add(value.parent.parent.parent.toString());
+      pathItems.add("${value.parent.parent.parent.parent.toString()}");
+      pathItems.add("${value.parent.parent.parent.parent.parent.toString()}");
+      pathItems.add("${value.parent.parent.parent.parent.parent.parent.toString()}");
+      pathItems.add("${value.parent.parent.parent.parent.parent.parent.parent.toString()}");
+      pathItems.add("-----------------------------------------------------");
+      pathItems.add("${v.toString()}");
+
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Permission.storage.request();
+    refreshPath();
   }
 
   @override
@@ -93,6 +116,29 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  refreshPath();
+                }),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: IconButton(
+                  icon: Icon(Icons.check_circle_outline),
+                  onPressed: () async{
+                    if (storageItems.length > 2) {
+                      print(storageItems[0].path);
+                      pathItems.add("----------------------");
+                      pathItems.add("${storageItems[0]}");
+                      pathItems.add("${storageItems[0].path}");
+                      pathItems.add("${storageItems[0].absolute}");
+                      pathItems.add("${storageItems[0].uri}");
+                      Directory tempPath = Directory(join(storageItems[0].path, "/Angel Legs/Report/Hello_${DateTime.now()}.txt"));
+                      File f = File(tempPath.path);
+                      await f.writeAsString("Hello World");
+                    }
+                  }),
+            ),
             Text(
               'You have pushed the button this many times:',
             ),
@@ -100,6 +146,15 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: pathItems.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(pathItems[index]),
+                    );
+                  }),
+            )
           ],
         ),
       ),
