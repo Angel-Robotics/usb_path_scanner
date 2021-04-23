@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  MyHomePage({Key? key, this.title}) : super(key: key);
+  final String? title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
     storageItems.clear();
     getExternalStorageDirectory().then((value) {
       print(">>> 0  $value");
-      print(">>> 1 ${value.parent}");
+      print(">>> 1 ${value!.parent}");
       print(">>> 2 ${value.parent.parent}");
       print(">>> 3 ${value.parent.parent.parent}");
       print(">>> 4 ${value.parent.parent.parent.parent.toString()}");
@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title!),
       ),
       body: Center(
         child: Column(
@@ -275,8 +275,8 @@ class _MyHomePageState extends State<MyHomePage> {
               trailing: Text("$_counter"),
               onTap: () async {
                 pathItems.clear();
-                Directory d =  await getExternalStorageDirectory();
-                File df = File(join(d.path, "hello.txt"));
+                Directory? d =  await getExternalStorageDirectory() ;
+                File df = File(join(d!.path, "hello.txt"));
                 try {
                   await df.writeAsString("helldjfsl");
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("completed write ")));
@@ -316,8 +316,8 @@ class _MyHomePageState extends State<MyHomePage> {
               trailing: Text("$_counter"),
               onTap: () async {
                 pathItems.clear();
-                Directory d =  await getExternalStorageDirectory();
-                File df = File(join(d.path, "hello.txt"));
+                Directory? d =  await (getExternalStorageDirectory() );
+                File df = File(join(d!.path, "hello.txt"));
                 try {
                   await df.writeAsString("helldjfsl");
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("completed write")));

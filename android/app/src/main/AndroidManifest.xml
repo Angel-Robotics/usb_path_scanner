@@ -4,13 +4,13 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-<!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
 
     <uses-feature android:name="android.hardware.usb.host" android:required="true"/>
 
     <application
-
+        android:preserveLegacyExternalStorage = "true"
         android:requestLegacyExternalStorage="true"
         android:label="usb_path_scanner"
         android:icon="@mipmap/ic_launcher">
