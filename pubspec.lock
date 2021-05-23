@@ -81,6 +81,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  libusb:
+    dependency: transitive
+    description:
+      name: libusb
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.23-nullsafety.0"
   matcher:
     dependency: transitive
     description:
@@ -172,6 +179,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.1"
+  quick_usb:
+    dependency: "direct main"
+    description:
+      name: quick_usb
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   sky_engine:
     dependency: transitive
     description: flutter
