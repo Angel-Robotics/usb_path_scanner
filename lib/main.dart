@@ -366,6 +366,14 @@ class _MyHomePageState extends State<MyHomePage> {
             tooltip: 'Increment',
             child: Icon(Icons.refresh),
           ),
+          FloatingActionButton(
+            heroTag: "3",
+            onPressed: (){
+
+            },
+            tooltip: 'Increment',
+            child: Icon(Icons.usb),
+          ),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
