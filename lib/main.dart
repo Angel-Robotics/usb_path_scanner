@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:usb_path_scanner/ui/quick_usb/quick_usb_test_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -369,7 +370,7 @@ class _MyHomePageState extends State<MyHomePage> {
           FloatingActionButton(
             heroTag: "3",
             onPressed: (){
-
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>QuickUsbTestPage()));
             },
             tooltip: 'Increment',
             child: Icon(Icons.usb),
