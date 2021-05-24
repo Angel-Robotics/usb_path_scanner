@@ -17,7 +17,10 @@ dependencies:
   path: any
   permission_handler: any
   quick_usb: ^0.2.0
-
+  ext_storage:
+    git:
+      url: git://github.com/Aduyrat/ext_storage.git
+      ref: master
 dev_dependencies:
   flutter_test:
     sdk: flutter
