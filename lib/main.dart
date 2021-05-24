@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -49,6 +50,16 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> pathItems = [];
   List<FileSystemEntity> storageItems = [];
 
+  void _example1() async {
+    var path = await ExtStorage.getExternalStorageDirectory();
+    print("path: $path");  // /storage/emulated/0
+  }
+
+  void _example2() async {
+    var path = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.directoryDownload);
+    print(path);  // /storage/emulated/0/Pictures
+  }
+
   Future refreshPath() async {
     pathItems.clear();
     storageItems.clear();
@@ -84,7 +95,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    refreshPath();
+    refreshPath().then((value){
+      _example1();
+      _example2();
+    });
+
   }
 
   @override
@@ -222,9 +237,6 @@ class _MyHomePageState extends State<MyHomePage> {
                      tempPath.listSync().forEach((element) {
                        pathItems.add(element.path);
                      });
-
-
-
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
                     pathItems.add("${e.toString()}");
